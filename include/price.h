@@ -10,7 +10,7 @@ class Price
 public:
     using Rep = std::int32_t;
 private:
-    Rep m_price;
+    Rep m_price {};
 public:
     explicit Price(Rep price) : m_price {price} {}
     Price() = default;
