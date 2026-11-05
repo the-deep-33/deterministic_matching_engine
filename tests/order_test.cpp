@@ -10,8 +10,8 @@ static void expectFreshSlot(const Order& o)
     EXPECT_EQ(o.in_use, 0u);
     EXPECT_EQ(o.side, 0u);
     EXPECT_EQ(o.price, Price{0});
-    EXPECT_EQ(o.remaining_qty, 0);
-    EXPECT_EQ(o.filled_qty, 0);
+    EXPECT_EQ(o.remaining_qty, Quantity{0});
+    EXPECT_EQ(o.filled_qty, Quantity{0});
     EXPECT_EQ(o.participant_id, 0);
     EXPECT_EQ(o.order_prev, kNoSlot);
     EXPECT_EQ(o.order_next, kNoSlot);
