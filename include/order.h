@@ -5,15 +5,16 @@
 #include <type_traits>
 #include "price.h"
 #include "types.h"
+#include "quantity.h"
 
 struct alignas(32) Order
 {
-    std::uint64_t generation : 40 {};
+    std::uint64_t generation : 44 {};
     std::uint64_t in_use : 1 {};
     std::uint64_t side : 1 {};
     Price price {};
-    std::int32_t remaining_qty {};
-    std::int32_t filled_qty {};
+    Quantity remaining_qty {};
+    Quantity filled_qty {};
     std::int32_t participant_id {}; //ID of the exchange participant who put out the order
     // The next two members have the slot numbers of the previous and the next order, so that we can link them together like a list
     std::uint32_t order_prev {kNoSlot};

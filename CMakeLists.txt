@@ -14,7 +14,7 @@ include(FetchContent)
 FetchContent_Declare(googletest URL https://github.com/google/googletest/archive/refs/tags/v1.18.0.zip)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(tests tests/smoke_test.cpp tests/price_test.cpp tests/order_test.cpp)
+add_executable(tests tests/smoke_test.cpp tests/price_test.cpp tests/order_test.cpp tests/quantity_test.cpp)
 target_include_directories(tests PRIVATE include)
 target_link_libraries(tests PRIVATE GTest::gtest_main)
 target_compile_options(tests PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion
