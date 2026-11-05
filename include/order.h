@@ -9,7 +9,7 @@
 
 struct alignas(32) Order
 {
-    std::uint64_t generation : 44 {};
+    std::uint64_t generation : kGenerationBits {};
     std::uint64_t in_use : 1 {};
     std::uint64_t side : 1 {};
     Price price {};
