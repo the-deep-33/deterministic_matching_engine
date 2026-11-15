@@ -9,9 +9,12 @@
 
 struct alignas(32) Order
 {
-    std::uint64_t generation : kGenerationBits {};
-    std::uint64_t in_use : 1 {};
-    std::uint64_t side : 1 {};
+private:
+    std::uint64_t m_generation : kGenerationBits {};
+    std::uint64_t m_in_use : 1 {};
+    std::uint64_t m_side : 1 {};
+    template <std::uint32_t SlotBits> friend class SlotMap;
+public:
     Price price {};
     Quantity remaining_qty {};
     Quantity filled_qty {};
@@ -19,6 +22,11 @@ struct alignas(32) Order
     // The next two members have the slot numbers of the previous and the next order, so that we can link them together like a list
     std::uint32_t order_prev {kNoSlot};
     std::uint32_t order_next {kNoSlot};
+
+    std::uint64_t getGeneration() const { return m_generation; }
+    bool getInUse() const { return m_in_use == 1; }
+    Side getSide() const { return m_side == 0 ? Side::Buy : Side::Sell; }
+    void setSide(Side side) { m_side = (side == Side::Sell); }
 };
 
 static_assert(std::is_trivially_copyable_v<Order>, "Order must be trivially copyable!");

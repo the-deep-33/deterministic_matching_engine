@@ -30,15 +30,17 @@ public:
         assert(!full());
         --m_counter;
         std::uint32_t slot = m_stack[m_counter];
-        m_orders[slot].in_use = 1;
+        m_orders[slot].m_in_use = 1;
         return slot;
     }
     void release(std::uint32_t slot)
     {
         assert(slot < kSlotCount);
-        assert(m_orders[slot].in_use == 1);
-        m_orders[slot].in_use = 0;
-        ++m_orders[slot].generation;
+        assert(m_orders[slot].m_in_use == 1);
+        Order fresh {};
+        fresh.m_generation = m_orders[slot].m_generation;
+        m_orders[slot] = fresh;
+        ++m_orders[slot].m_generation;
         m_stack[m_counter] = slot;
         ++m_counter;
     }

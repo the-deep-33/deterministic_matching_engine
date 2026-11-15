@@ -6,9 +6,9 @@
 
 static void expectFreshSlot(const Order& o)
 {
-    EXPECT_EQ(o.generation, 0u);
-    EXPECT_EQ(o.in_use, 0u);
-    EXPECT_EQ(o.side, 0u);
+    EXPECT_EQ(o.getGeneration(), 0u);
+    EXPECT_FALSE(o.getInUse());
+    EXPECT_EQ(o.getSide(), Side::Buy);
     EXPECT_EQ(o.price, Price{0});
     EXPECT_EQ(o.remaining_qty, Quantity{0});
     EXPECT_EQ(o.filled_qty, Quantity{0});
