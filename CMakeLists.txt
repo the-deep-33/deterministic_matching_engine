@@ -21,6 +21,7 @@ add_executable(
     tests/quantity_test.cpp 
     tests/slot_map_test.cpp
 )
+add_executable(reference reference/reference_engine.cpp)
 target_include_directories(tests PRIVATE include)
 target_link_libraries(tests PRIVATE GTest::gtest_main)
 target_compile_options(tests PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion
