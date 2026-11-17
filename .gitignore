@@ -1,3 +1,4 @@
 build*/
 help/
-.directoryreference/reference_engine
+.directory
+reference/reference_engine
