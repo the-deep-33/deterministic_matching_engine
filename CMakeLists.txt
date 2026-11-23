@@ -32,9 +32,9 @@ add_test(
 target_include_directories(tests PRIVATE include)
 target_link_libraries(tests PRIVATE GTest::gtest_main)
 target_compile_options(tests PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion
-    $<$<CONFIG:Debug>:-fsanitize=address,undefined -fno-omit-frame-pointer>)
+    $<$<CONFIG:Debug>:-fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer>)
 target_compile_options(reference PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion
-    $<$<CONFIG:Debug>:-fsanitize=address,undefined -fno-omit-frame-pointer>)
+    $<$<CONFIG:Debug>:-fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer>)
 target_link_options(tests PRIVATE $<$<CONFIG:Debug>:-fsanitize=address,undefined>)
 target_link_options(reference PRIVATE $<$<CONFIG:Debug>:-fsanitize=address,undefined>)
 

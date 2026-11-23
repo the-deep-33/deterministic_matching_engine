@@ -6,6 +6,9 @@
 #include <algorithm>
 #include <functional>
 
+constexpr std::int32_t kMaxParticipants         = 1 << 20;
+constexpr std::int32_t kMaxOrdersPerParticipant = 200;
+
 enum class Side { Buy, Sell };
 
 enum class BadRequest
@@ -13,7 +16,9 @@ enum class BadRequest
     TOO_LATE,
     BAD_QTY,
     BAD_PRICE,
+    BAD_PARTICIPANT,
     NOT_YOURS,
+    TOO_MANY_ORDERS,
 };
 
 enum class State { Live, Gone, };
@@ -63,10 +68,14 @@ std::string_view BadReqToText(BadRequest req)
             return "BAD_QUANTITY";
         case BadRequest::BAD_PRICE:
             return "BAD_PRICE";
+        case BadRequest::BAD_PARTICIPANT:
+            return "BAD_PARTICIPANT";
         case BadRequest::NOT_YOURS:
             return "NOT_YOURS";
         case BadRequest::TOO_LATE:
             return "TOO_LATE";
+        case BadRequest::TOO_MANY_ORDERS:
+            return "TOO_MANY_ORDERS";
     }
     return "?";
 }
@@ -152,6 +161,37 @@ int main()
             if(order.price < 1 || order.price > 100'000'000)
             {
                 print_reject(sequence_number, timestamp, order.participant, BadRequest::BAD_PRICE);
+                continue;
+            }
+            if(order.participant < 0 || order.participant >= kMaxParticipants)
+            {
+                print_reject(sequence_number, timestamp, order.participant, BadRequest::BAD_PARTICIPANT);
+                continue;
+            }
+            std::int64_t participant_count {0};
+            for(const auto& [price, orders]: bids)
+            {
+                for(const auto& temp_order: orders)
+                {
+                    if(temp_order.participant == order.participant)
+                    {
+                        ++participant_count;
+                    }
+                }
+            }
+            for(const auto& [price, orders]: asks)
+            {
+                for(const auto& temp_order: orders)
+                {
+                    if(temp_order.participant == order.participant)
+                    {
+                        ++participant_count;
+                    }
+                }
+            }
+            if(participant_count >= kMaxOrdersPerParticipant)
+            {
+                print_reject(sequence_number, timestamp, order.participant, BadRequest::TOO_MANY_ORDERS);
                 continue;
             }
             order.id = sequence_number;
@@ -244,6 +284,11 @@ int main()
             std::int64_t participant {};
             std::int64_t order_id {};
             std::cin >> participant >> order_id;
+            if(participant < 0 || participant >= kMaxParticipants)
+            {
+                print_reject(sequence_number, timestamp, participant, BadRequest::BAD_PARTICIPANT);
+                continue;
+            }
             auto history_it = history.find(order_id);
             if(history_it == history.end())
             {

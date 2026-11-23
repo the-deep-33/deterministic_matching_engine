@@ -2,3 +2,4 @@ build*/
 help/
 .directory
 reference/reference_engine
+reference/incognito/*
